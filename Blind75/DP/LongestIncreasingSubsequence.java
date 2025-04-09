@@ -1,26 +1,44 @@
 package Blind75.DP;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class LongestIncreasingSubsequence {
   static int longestIncreasingSubsequence(int nums[]) {
     int n = nums.length;
-    int[] dp = new int[n];
-    for (int i = 0; i < n; i++) {
-      dp[i] = 1;
-    }
-    for (int i = 1; i < n; i++) {
-      for (int j = 0; j < i; j++) {
-        if (nums[j] < nums[i]) {
-          dp[i] = Math.max(dp[i], dp[j] + 1);
+    int []dp=new int[n];
+    int []prev=new int[n+1];
+    int maxLen=1;
+    int lastIndex=-1;
+
+    Arrays.fill(dp, 1);
+    Arrays.fill(prev,-1);
+
+    for(int i=0;i<n;i++){
+      for(int j=0;j<i;j++){
+        if(nums[j]<nums[i] && dp[j]+1 >dp[i]){
+          dp[i]=dp[j]+1;
+          prev[i]=j;
         }
+      }
+      if(dp[i]>maxLen){
+        maxLen=dp[i];
+        lastIndex=i;    
       }
     }
 
-    int result = 0;
-    for (int length : dp) {
-      result = Math.max(length, result);
+    List<Integer> lis=new ArrayList<>();
+    int idx=lastIndex;
+    while(idx!=-1){
+      lis.add(nums[idx]);
+      idx=prev[idx];
     }
 
-    return result;
+    Collections.reverse(lis);
+    System.out.println(lis);
+    return maxLen;
   }
 
   public static void main(String[] args) {
